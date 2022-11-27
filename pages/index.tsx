@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import { trpc } from '../utils/trpc';
 
 
@@ -11,20 +10,20 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className="p-[2rem]">
       <Head>
         <title>Flow</title>
-        <meta name="description" content="idk a tool to help manage life/work flow" />
+        <meta name="description" content="idk yet, just a tool to help manage life/work flow" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main className="min-h-screen flex flex-col justify-center items-center py-[4rem]">
         <h1 className="text-3xl font-bold underline">
           <p>{hello.data.greeting}</p>
         </h1>
       </main>
 
-      <footer className={styles.footer}>
+      <footer className="">
       </footer>
     </div>
   )
