@@ -5,14 +5,18 @@ import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import {
-  ArchiveBoxIcon,
   Bars3Icon,
   BellIcon,
   FlagIcon,
-  InboxIcon,
-  NoSymbolIcon,
+  BoltIcon,
+  FolderOpenIcon,
+  CalendarDaysIcon,
   PencilSquareIcon,
-  UserCircleIcon,
+  TrophyIcon,
+  WrenchScrewdriverIcon,
+  PresentationChartBarIcon,
+  ScaleIcon,
+  NoSymbolIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 
@@ -37,13 +41,15 @@ const navigation = [
   { name: 'Reporting', href: '#', children: [] },
   { name: 'Settings', href: '#', children: [] },
 ]
+
 const sidebarNavigation = [
-  { name: 'Open', href: '#', icon: InboxIcon, current: true },
-  { name: 'Archive', href: '#', icon: ArchiveBoxIcon, current: false },
-  { name: 'Customers', href: '#', icon: UserCircleIcon, current: false },
-  { name: 'Flagged', href: '#', icon: FlagIcon, current: false },
-  { name: 'Spam', href: '#', icon: NoSymbolIcon, current: false },
-  { name: 'Drafts', href: '#', icon: PencilSquareIcon, current: false },
+  { name: 'Tasks', href: '#tasks', icon: BoltIcon, current: true },
+  { name: 'Notes', href: '#notes', icon: PencilSquareIcon, current: false },
+  { name: 'Compare', href: '#compare', icon: ScaleIcon, current: false },
+  { name: 'Calendar', href: '#calendar', icon: CalendarDaysIcon, current: false },
+  { name: 'Goals', href: '#goals', icon: TrophyIcon, current: false },
+  { name: 'Analytics', href: '#analytics', icon: PresentationChartBarIcon, current: false },
+  { name: 'Configuration', href: '#config', icon: WrenchScrewdriverIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
@@ -64,14 +70,6 @@ export default function Home() {
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full overflow-hidden">
-        ```
-      */}
       <div className="flex h-screen flex-col">
         {/* Head */}
         <Head>
