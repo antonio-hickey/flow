@@ -55,6 +55,12 @@ const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
+const projects = [
+  { name: 'Flow', n_tasks: 32, current: true },
+  { name: 'gDash', n_tasks: 1, current: false },
+  { name: 'FedPy', n_tasks: 8, current: false },
+  { name: 'TradovatePy', n_tasks: 12, current: false },
+]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -364,13 +370,28 @@ export default function Home() {
               <h1 id="primary-heading" className="sr-only">
                 Home
               </h1>
-              <p>{hello.data.greeting}</p>
+                <p>{hello.data.greeting}</p>
             </section>
 
             {/* Secondary column (hidden on smaller screens) */}
             <aside className="hidden lg:order-first lg:block lg:flex-shrink-0">
               <div className="relative flex h-full w-96 flex-col overflow-y-auto border-r border-gray-200 bg-gray-100">
-                <p>{hello.data.greeting}</p>
+                <h1 id="primary-heading" className="px-1 underline">
+                  Projects
+                </h1>
+                {projects.map((project) => (
+                    <a
+                      key={project.name}
+                      className={classNames(
+                        project.current
+                          ? 'bg-gray-200 text-gray-900'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+                      )}
+                    >
+                      {project.name}
+                    </a>
+                ))}
               </div>
             </aside>
           </main>
