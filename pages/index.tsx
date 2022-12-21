@@ -21,6 +21,44 @@ import {
 } from '@heroicons/react/24/outline'
 
 
+
+
+const tagsMap = {
+  featTag: (key: number) => {
+    return (
+      <span 
+        key={key}
+        class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
+      >feature</span>
+    )
+  },
+  tasksTag: (key: number) => {
+    return (
+      <span 
+        key={key}
+        class="bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-200 dark:text-indigo-800"
+      >tasks</span>
+    )
+  },
+  uiTag: (key: number) => {
+    return (
+      <span 
+        key={key}
+        class="bg-rose-100 text-rose-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-rose-200 dark:text-rose-800"
+      >ui</span>
+    )
+  },
+  refactorTag: (key: number) => {
+    return (
+      <span 
+        key={key} 
+        className="bg-emerald-100 text-emerald-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-emerald-200 dark:text-emerald-800"
+      >refactor</span>
+    )
+  }
+
+}
+
 // TODO: replace this test data with actual functionality
 const user = {
   name: 'Whitney Francis',
@@ -56,7 +94,25 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ]
 const projects = [
-  { name: 'Flow', n_tasks: 32, current: true },
+  { 
+    name: 'Flow', 
+    n_tasks: 32, 
+    current: true, 
+    tasks: [
+      {
+        title: "Build tasks ui",
+        description: "For each task render a card displaying it's data bro",
+        minutesTracked: 123,
+        tags: [tagsMap.uiTag, tagsMap.tasksTag, tagsMap.featTag],
+      },
+      {
+        title: "Refactor tasks ui",
+        description: "Make thwe cards pretty and stuff like that",
+        minutesTracked: 0,
+        tags: [tagsMap.uiTag, tagsMap.tasksTag, tagsMap.refactorTag],
+      },
+    ] 
+  },
   { name: 'gDash', n_tasks: 1, current: false },
   { name: 'FedPy', n_tasks: 8, current: false },
   { name: 'TradovatePy', n_tasks: 12, current: false },
@@ -370,7 +426,25 @@ export default function Home() {
               <h1 id="primary-heading" className="sr-only">
                 Home
               </h1>
-                <p>{hello.data.greeting}</p>
+
+              <div className="flex flex-col w-full py-1 px-1 space-y-3">
+                {projects[0].tasks.map((task) => (
+                  <div className="block p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                    <div className="flex flex-row space-x-3">
+                      <h5>{task.title}</h5>   
+                      <p>Minutes tracked to task: {task.minutesTracked}</p>
+                      <div>
+                        {task.tags.map((tag, i) => {
+                          return tag(i)
+                        })}
+                      </div>
+                    </div>
+                    <div className="flex flex-row">
+                      <p>Description: {task.description}</p> 
+                    </div>
+                  </div>
+                ))}
+              </div>
             </section>
 
             {/* Secondary column (hidden on smaller screens) */}
