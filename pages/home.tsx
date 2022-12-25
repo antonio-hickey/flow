@@ -4,7 +4,7 @@ import { trpc } from '../utils/trpc';
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { Prisma } from '@prisma/client'
+import { Prisma, Project } from '@prisma/client'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import {
   Bars3Icon,
@@ -23,15 +23,52 @@ import {
 } from '@heroicons/react/24/outline'
 
 
-
-const createTag = (tagName: number, tagColor: string) => {
-  return (
-    <span 
-      className="bg-${tagColor}-100 text-${tagColor}-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-${tagColor}-200 dark:text-${tagColor}-800"
-    >
-      {tagName}
-    </span>
-  )
+const tagMap = {
+  "feature": () => {
+    return (
+      <span 
+        className='bg-blue-100  text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800'
+      >
+        feature
+      </span>
+    )
+  },
+  "refactor": () => {
+    return (
+      <span 
+        className='bg-yellow-100  text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-200 dark:text-yellow-800'
+      >
+        refactor
+      </span>
+    )
+  },
+  "ui": () => {
+    return (
+      <span 
+        className='bg-orange-100  text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-800'
+      >
+        refactor
+      </span>
+    )
+  }, 
+  "bug": () => {
+    return (
+      <span
+        className='bg-red-100  text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800'
+      >
+        bug
+      </span>
+    )
+  },
+  "tasks": () => {
+    return (
+      <span
+        className='bg-cyan-100  text-cyan-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cyan-200 dark:text-cyan-800'
+      >
+        tasks
+      </span>
+    )
+  }
 }
 
 // TODO: replace this test data with actual functionality
@@ -70,11 +107,15 @@ function classNames(...classes: string[]) {
 export default function Home() {
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  let projects = trpc.projects.getProjects.useQuery({
+    //userId: session?.user?.id!
+    userId: "clc14rlak0000kgvf6p6r488v"
+  }).data!
 
   if (typeof window === "undefined") return null
 
   if (session) {
-    console.log(session)
+    console.log(projects)
     return (
       <>
         <div className="flex h-screen flex-col">
@@ -178,7 +219,7 @@ export default function Home() {
                       <>
                         <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2">
                           <span className="sr-only">Open user menu</span>
-                          <img className="h-8 w-8 rounded-full" src={session.user.imageUrl} alt="" />
+                          <img className="h-8 w-8 rounded-full" src={session?.user?.image!} alt="" />
                         </Menu.Button>
 
                         <Transition
@@ -208,11 +249,11 @@ export default function Home() {
                               <Menu.Item>
                                 {({ active }) => (
                                   <a
-                                    href="#"
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
                                       'block px-4 py-2 text-sm text-gray-700'
                                     )}
+                                    onClick={() => signOut()}
                                   >
                                     Sign Out
                                   </a>
@@ -387,14 +428,14 @@ export default function Home() {
                 </h1>
 
                 <div className="flex flex-col w-full py-1 px-1 space-y-3">
-                  {session.user.projects[0].tasks.map((task) => (
+                  {projects[0].tasks.map((task) => (
                     <div className="block p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                       <div className="flex flex-row space-x-3">
-                        <h5>{task.title}</h5>   
-                        <p>Minutes tracked to task: {task.minutesTracked}</p>
+                        <h5>{task.name}</h5>   
+                        <p>Minutes tracked to task: {task.minutesWorked}</p>
                         <div>
                           {task.tags.map((tag, i) => {
-                            return tag(i)
+                            return tagMap[tag.tag.name]()
                           })}
                         </div>
                       </div>

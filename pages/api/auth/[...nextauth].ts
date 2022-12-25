@@ -14,8 +14,9 @@ export const authOptions = {
   callbacks: {
     // @ts-expect-error
     async session({ session, user }) {
-      //session.user.id = user.id;
+      session.user.id = user.id;
       //session.user.highScore = user.highScore;
+      console.log(user)
       return session;
     },
   },
