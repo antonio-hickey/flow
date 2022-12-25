@@ -5,13 +5,26 @@ export const projectRouter = router({
   getProjects: procedure
     .input(
       z.object({
-        text: z.string(),
+        userId: z.string(),
       }),
     )
     .query(({ input }) => {
-      return {
-        greeting: `hello ${input.text}`,
-      };
+      return prisma?.project.findMany({
+        where: {
+          userId: input.userId
+        },
+        include: {
+          tasks: {
+            include: {
+              tags: {
+                include: {
+                  tag: true
+                }
+              }
+            }
+          }
+        }
+      })
     }),
 });
 
