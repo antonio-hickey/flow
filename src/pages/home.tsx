@@ -125,7 +125,7 @@ const HomePage: NextPage | null = () => {
     if (!session) {
       router.push("/")
     }
-  })
+  });
 
   return (
     <>
@@ -435,7 +435,7 @@ const HomePage: NextPage | null = () => {
               className="flex h-full min-w-0 flex-1 flex-col overflow-y-auto lg:order-last"
             >
 							<div className="flex flex-row">
-								<div className="flex flex-row w-full p-1 border-red-200 bg-gray-100 h-20 justify-end items-center">
+								<div className="flex flex-row w-full p-1 border-b border-gray-200 bg-gray-100 h-20 justify-end items-center">
 									<button 
 										className="relative inline-flex items-center justify-center p-0.5 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
 										onClick={() => setShowModal(true)}
