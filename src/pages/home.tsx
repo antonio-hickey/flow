@@ -4,8 +4,8 @@ import { trpc } from '../utils/trpc';
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { Prisma, Project } from '@prisma/client'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { Prisma, Project, Task } from '@prisma/client'
+import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid'
 import {
   Bars3Icon,
   BellIcon,
@@ -20,6 +20,7 @@ import {
   ScaleIcon,
   NoSymbolIcon,
   XMarkIcon,
+	FunnelIcon
 } from '@heroicons/react/24/outline'
 
 import { useRouter } from 'next/router'
@@ -111,9 +112,14 @@ const HomePage: NextPage | null = () => {
   const router = useRouter()
   const { data: session } = useSession()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  let projects = trpc.project.getProjects.useQuery({
+  const { mutate: addTask } = trpc.task.addTask.useMutation();
+  const projects = trpc.project.getProjects.useQuery({
     userId: session?.user?.id
-  }).data!
+  }).data!;
+
+	const [showModal, setShowModal] = useState(false);
+	const [newTaskName, setnewTaskName] = useState("");
+	const [newTaskDescrip, setnewTaskDescrip] = useState("");
 
   useEffect(() => {
     if (!session) {
@@ -370,7 +376,7 @@ const HomePage: NextPage | null = () => {
                     <div className="border-t border-gray-200 pt-4 pb-3">
                       <div className="max-w-8xl mx-auto flex items-center px-4 sm:px-6">
                         <div className="flex-shrink-0">
-                          <img className="h-10 w-10 rounded-full" src={session?.user?.imageUrl!} alt="" />
+                          <img className="h-10 w-10 rounded-full" src={session?.user?.image!} alt="" />
                         </div>
                         <div className="ml-3 min-w-0 flex-1">
                           <div className="truncate text-base font-medium text-gray-800">{session?.user?.name}</div>
@@ -428,19 +434,30 @@ const HomePage: NextPage | null = () => {
               aria-labelledby="primary-heading"
               className="flex h-full min-w-0 flex-1 flex-col overflow-y-auto lg:order-last"
             >
-              <h1 id="primary-heading" className="sr-only">
-                Home
-              </h1>
+							<div className="flex flex-row">
+								<div className="flex flex-row w-full p-1 border-red-200 bg-gray-100 h-20 justify-end items-center">
+									<button 
+										className="relative inline-flex items-center justify-center p-0.5 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+										onClick={() => setShowModal(true)}
+									>
+									  <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+              	  		<PlusIcon className="h-6 w-6 ml-5"/>
+											New Task
+									  </span>
+									</button>
+								</div>
+							</div>
 
-              <div className="flex flex-col w-full py-1 px-1 space-y-3">
+              <div className="flex flex-col w-full mt-3 py-1 px-1 space-y-3">
                 {projects ? (
                   projects[0]?.tasks.map((task) => (
-                  <div className="block p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                  <div className="block p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100">
                     <div className="flex flex-row space-x-3">
                       <h5>{task.name}</h5>   
                       <p>Minutes tracked to task: {task.minutesWorked}</p>
                       <div>
                         {task.tags.map((tag, i) => {
+													// @ts-ignore
                           return tagMap[tag.tag.name]()
                         })}
                       </div>
@@ -463,18 +480,94 @@ const HomePage: NextPage | null = () => {
                   projects.map((project) => (
                     <a
                       key={project.name}
-                      className={classNames(
-                        project.current
-                          ? 'bg-gray-200 text-gray-900'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
-                      )}
+                      //className={classNames(
+                      //  project.current
+                      //    ? 'bg-gray-200 text-gray-900'
+                      //    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                      //  'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+                      //)}
                     >
                       {project.name}
                     </a>
                 ))): null}
               </div>
             </aside>
+
+						{showModal ? (
+							<>
+ 								<div
+          			  className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          			>
+          			  <div className="relative w-auto my-6 mx-auto max-w-3xl">
+          			    {/*content*/}
+          			    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+          			      {/*header*/}
+          			      <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+          			        <h3 className="text-3xl font-semibold">
+          			          Create Task
+          			        </h3>
+          			        <button
+          			          className="p-1 ml-auto border-gray-100 border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+          			          onClick={() => setShowModal(false)}
+          			        >
+          			          <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+          			            ×
+          			          </span>
+          			        </button>
+          			      </div>
+          			      {/*body*/}
+          			      <div className="relative p-6 flex-auto">
+												<form>
+													<div className="mb-6">
+												    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
+												    <input 
+															type="text" 
+															id="default-input" 
+															className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+															onChange={e => setnewTaskName(e.target.value)}
+														/>
+													</div>
+													<div className="mb-6">
+														<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+														<textarea 
+															className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."
+															onChange={e => setnewTaskDescrip(e.target.value)}
+														>
+														</textarea>
+													</div>
+												</form>
+          			      </div>
+          			      {/*footer*/}
+          			      <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+          			        <button
+          			          className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          			          type="button"
+          			          onClick={() => setShowModal(false)}
+          			        >
+          			          Close
+          			        </button>
+          			        <button
+          			          className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          			          type="button"
+          			          onClick={() => {
+														addTask({
+															name: newTaskName,
+															description: newTaskDescrip,
+															projectId: 1,
+															userId: session?.user?.id!,
+														})
+														setShowModal(false)
+													}}
+          			        >
+          			          Create Task
+          			        </button>
+          			      </div>
+          			    </div>
+          			  </div>
+          			</div>
+          			<div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+							</>
+						): null}
           </main>
         </div>
       </div>
