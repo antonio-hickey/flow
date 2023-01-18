@@ -84,7 +84,8 @@ model Tag {
   id            Int         @id @default(autoincrement())
   name          String      @db.VarChar(25)
   description   String?
-  color         String      @db.VarChar(6)
+  bgColor       String      @db.VarChar(6)
+	fgColor       String      @db.VarChar(6)
   tasks         TaskTag[]
 }
 

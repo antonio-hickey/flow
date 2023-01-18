@@ -26,54 +26,10 @@ import {
 import { useRouter } from 'next/router'
 import { NextPage } from 'next';
 
+import Tag from './../components/tags';
 
-const tagMap = {
-  "feature": () => {
-    return (
-      <span 
-        className='bg-blue-100  text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800'
-      >
-        feature
-      </span>
-    )
-  },
-  "refactor": () => {
-    return (
-      <span 
-        className='bg-yellow-100  text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-200 dark:text-yellow-800'
-      >
-        refactor
-      </span>
-    )
-  },
-  "ui": () => {
-    return (
-      <span 
-        className='bg-orange-100  text-orange-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-800'
-      >
-        refactor
-      </span>
-    )
-  }, 
-  "bug": () => {
-    return (
-      <span
-        className='bg-red-100  text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-800'
-      >
-        bug
-      </span>
-    )
-  },
-  "tasks": () => {
-    return (
-      <span
-        className='bg-cyan-100  text-cyan-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-cyan-200 dark:text-cyan-800'
-      >
-        tasks
-      </span>
-    )
-  }
-}
+
+
 
 // TODO: replace this test data with actual functionality
 const navigation = [
@@ -458,7 +414,11 @@ const HomePage: NextPage | null = () => {
                       <div>
                         {task.tags.map((tag, i) => {
 													// @ts-ignore
-                          return tagMap[tag.tag.name]()
+													return (<Tag 
+														tagName={tag.tag.name}
+														bgColor={tag.tag.bgColor}
+														fgColor={tag.tag.fgColor}
+													/>)
                         })}
                       </div>
                     </div>
