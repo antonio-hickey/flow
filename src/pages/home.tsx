@@ -76,6 +76,8 @@ const HomePage: NextPage | null = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [newTaskName, setnewTaskName] = useState("");
 	const [newTaskDescrip, setnewTaskDescrip] = useState("");
+	const [currentProject, setCurrentProject] = useState(0)
+
 
   useEffect(() => {
     if (!session) {
@@ -406,14 +408,13 @@ const HomePage: NextPage | null = () => {
 
               <div className="flex flex-col w-full mt-3 py-1 px-1 space-y-3">
                 {projects ? (
-                  projects[0]?.tasks.map((task) => (
+                  projects[currentProject]?.tasks.map((task) => (
                   <div className="block p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100">
                     <div className="flex flex-row space-x-3">
                       <h5>{task.name}</h5>   
                       <p>Minutes tracked to task: {task.minutesWorked}</p>
                       <div>
-                        {task.tags.map((tag, i) => {
-													// @ts-ignore
+                        {task.tags.map((tag) => {
 													return (<Tag 
 														tagName={tag.tag.name}
 														bgColor={tag.tag.bgColor}
@@ -437,15 +438,17 @@ const HomePage: NextPage | null = () => {
                   Projects
                 </h1>
                 {projects ? (
-                  projects.map((project) => (
+                  projects.map((project, i) => (
                     <a
-                      key={project.name}
-                      //className={classNames(
-                      //  project.current
-                      //    ? 'bg-gray-200 text-gray-900'
-                      //    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                      //  'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
-                      //)}
+                      key={i}
+                      className='group flex items-center px-2 py-2 text-sm font-medium hover:bg-gray-50 cursor-pointer'
+											style={currentProject == i ? {
+												color: '#111827',
+												backgroundColor: '#E5E7EB',
+											}: {
+												color: '#52525B',
+											}}
+											onClick={() => setCurrentProject(i)}
                     >
                       {project.name}
                     </a>
