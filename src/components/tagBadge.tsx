@@ -5,7 +5,7 @@ interface TagProps {
 }
 
 
-export default function Tag(props: TagProps) {
+export default function TagBadge(props: TagProps) {
   return (
     <span 
       className='text-xs font-semibold mr-2 px-2.5 py-0.5 rounded'

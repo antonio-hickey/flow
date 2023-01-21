@@ -27,7 +27,7 @@ import { useRouter } from 'next/router'
 import { NextPage } from 'next';
 
 import Tag from './../components/tags';
-
+import TaskCard from '../components/taskCard';
 
 
 
@@ -408,26 +408,16 @@ const HomePage: NextPage | null = () => {
 
               <div className="flex flex-col w-full mt-3 py-1 px-1 space-y-3">
                 {projects ? (
-                  projects[currentProject]?.tasks.map((task) => (
-                  <div className="block p-6 space-y-5 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100">
-                    <div className="flex flex-row space-x-3">
-                      <h5>{task.name}</h5>   
-                      <p>Minutes tracked to task: {task.minutesWorked}</p>
-                      <div>
-                        {task.tags.map((tag) => {
-													return (<Tag 
-														tagName={tag.tag.name}
-														bgColor={tag.tag.bgColor}
-														fgColor={tag.tag.fgColor}
-													/>)
-                        })}
-                      </div>
-                    </div>
-                    <div className="flex flex-row">
-                      <p>Description: {task.description}</p> 
-                    </div>
-                  </div>
-                ))): null}
+                  projects[currentProject]?.tasks.map((task, i) => (
+										<TaskCard 
+											name={task.name}
+											description={task.description}
+											minsWorked={task.minutesWorked}
+											tags={task.tags}
+											key={i}
+										/>
+                	))
+								): null}
               </div>
             </section>
 
