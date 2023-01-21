@@ -87,7 +87,7 @@ const HomePage: NextPage | null = () => {
 
   return (
     <>
-      <div className="flex h-screen flex-col">
+      <div className="flex h-screen flex-col dark:bg-gray-900">
         {/* Head */}
         <Head>
           <title>Flow</title>
@@ -96,7 +96,7 @@ const HomePage: NextPage | null = () => {
         </Head>
 
         {/* Top nav */}
-        <header className="relative flex h-16 flex-shrink-0 items-center bg-white">
+        <header className="relative flex h-16 flex-shrink-0 items-center bg-white dark:bg-gray-800">
           {/* Logo area */}
           <div className="absolute inset-y-0 left-0 md:static md:flex-shrink-0">
             <a
@@ -146,17 +146,14 @@ const HomePage: NextPage | null = () => {
           </div>
 
           {/* Desktop nav area */}
-          <div className="hidden md:flex md:min-w-0 md:flex-1 md:items-center md:justify-between">
-            <div className="min-w-0 flex-1">
-              <div className="relative max-w-2xl text-gray-400 focus-within:text-gray-500">
-                <label htmlFor="desktop-search" className="sr-only">
-                  Search
-                </label>
+          <div className="hidden md:flex md:min-w-0 md:flex-1 md:items-center md:justify-between dark:text-gray-200">
+            <div className="min-w-0 flex-1 px-3">
+              <div className="relative max-w-2xl py-1 text-gray-400 focus-within:text-gray-500 dark:text-gray-200 dark:bg-gray-700 border rounded-2xl dark:border-gray-600">
                 <input
                   id="desktop-search"
                   type="search"
                   placeholder="Search"
-                  className="block w-full border-transparent pl-12 placeholder-gray-500 focus:border-transparent focus:ring-0 sm:text-sm"
+                  className="block w-full border-transparent pl-12 placeholder-gray-500 focus:border-transparent focus:ring-0 sm:text-sm dark:bg-gray-700 border rounded-2xl"
                 />
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-4">
                   <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
@@ -177,7 +174,7 @@ const HomePage: NextPage | null = () => {
               </nav>
               <div className="flex items-center space-x-8">
                 <span className="inline-flex">
-                  <a href="#" className="-mx-1 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500">
+                  <a href="#" className="-mx-1 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 dark:bg-zinc-800">
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </a>
@@ -367,14 +364,14 @@ const HomePage: NextPage | null = () => {
         {/* Bottom section */}
         <div className="flex min-h-0 flex-1 overflow-hidden">
           {/* Narrow sidebar*/}
-          <nav aria-label="Sidebar" className="hidden md:block md:flex-shrink-0 md:overflow-y-auto md:bg-gray-800">
+          <nav aria-label="Sidebar" className="hidden md:block md:flex-shrink-0 md:overflow-y-auto bg-gray-100 dark:bg-gray-800">
             <div className="relative flex w-20 flex-col space-y-3 p-3">
               {sidebarNavigation.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-400 hover:bg-gray-700',
+                    item.current ? 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200' : 'text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200',
                     'flex-shrink-0 inline-flex items-center justify-center h-14 w-14 rounded-lg'
                   )}
                 >
@@ -393,12 +390,17 @@ const HomePage: NextPage | null = () => {
               className="flex h-full min-w-0 flex-1 flex-col overflow-y-auto lg:order-last"
             >
 							<div className="flex flex-row">
-								<div className="flex flex-row w-full p-1 border-b border-gray-200 bg-gray-100 h-20 justify-end items-center">
+								<div className="flex flex-row w-full p-1 border-b border-gray-200 bg-gray-100 h-20 justify-end items-center dark:bg-gray-800 dark:border-gray-500">
 									<button 
-										className="relative inline-flex items-center justify-center p-0.5 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+										className={classNames(
+											"relative inline-flex items-center justify-center p-0.5 mr-2 overflow-hidden text-sm font-medium",
+											"text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600",
+											"group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300",
+											"dark:border-gray-700 dark:focus:ring-blue-800"
+										)}
 										onClick={() => setShowModal(true)}
 									>
-									  <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+									  <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 dark:bg-gray-700">
               	  		<PlusIcon className="h-6 w-6 ml-5"/>
 											New Task
 									  </span>
@@ -406,7 +408,7 @@ const HomePage: NextPage | null = () => {
 								</div>
 							</div>
 
-              <div className="flex flex-col w-full mt-3 py-1 px-1 space-y-3">
+              <div className="flex flex-col w-full mt-3 py-1 px-3 space-y-3 ">
                 {projects ? (
                   projects[currentProject]?.tasks.map((task, i) => (
 										<TaskCard 
@@ -423,24 +425,23 @@ const HomePage: NextPage | null = () => {
 
             {/* Secondary column (hidden on smaller screens) */}
             <aside className="hidden lg:order-first lg:block lg:flex-shrink-0">
-              <div className="relative flex h-full w-96 flex-col overflow-y-auto border-r border-gray-200 bg-gray-100">
-                <h1 id="primary-heading" className="px-1 underline">
+              <div className="relative flex h-full w-96 py-2 flex-col overflow-y-auto border-x border-gray-200 bg-gray-100 dark:bg-gray-800 dark:border-gray-500 dark:text-gray-200">
+                <h1 id="primary-heading" className="px-1 underline pb-2">
                   Projects
                 </h1>
                 {projects ? (
                   projects.map((project, i) => (
                     <a
                       key={i}
-                      className='group flex items-center px-2 py-2 text-sm font-medium hover:bg-gray-50 cursor-pointer'
-											style={currentProject == i ? {
-												color: '#111827',
-												backgroundColor: '#E5E7EB',
-											}: {
-												color: '#52525B',
-											}}
+                      className={classNames(currentProject == i ? 
+												'bg-gradient-to-br from-purple-600/25 to-blue-500/25 group-hover:from-purple-600 group-hover:to-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-300' 
+												: '',
+												'group flex items-center px-2 py-2 text-sm font-medium hover:bg-gray-50 cursor-pointer border-b dark:border-gray-700',
+												'dark:hover:bg-gray-700'
+											)}
 											onClick={() => setCurrentProject(i)}
                     >
-                      {project.name}
+                    	{project.name}
                     </a>
                 ))): null}
               </div>
